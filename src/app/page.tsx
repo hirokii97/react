@@ -1,24 +1,40 @@
 "use client";
 
-import { useReducer } from "react";
+import TaskList from "@/app/TaskList";
+import { useState } from "react";
+
+export type TaskType = { id: number; text: string; done: boolean };
 
 export default function Home() {
-  const reducer = (state: number, action: { type: string }) => {
-    switch (action.type) {
-      case "increment":
-        return state + 1;
-      case "decrement":
-        return state - 1;
-      default:
-        return state;
-    }
-  };
-  const [count, dispatch] = useReducer(reducer, 0);
+  const initialTasks: TaskType[] = [
+    { id: 0, text: "Visit Kafka Museum", done: true },
+    { id: 1, text: "Watch a puppet show", done: false },
+    { id: 2, text: "Lennon Wall pic", done: false },
+  ];
+  const [tasks, setTasks] = useState(initialTasks);
+  function handleChangeTask(task: TaskType) {
+    setTasks(
+      tasks.map((t) => {
+        if (t.id === task.id) {
+          return task;
+        } else {
+          return t;
+        }
+      })
+    );
+  }
+  function handleDeleteTask(task: TaskType) {
+    setTasks(tasks.filter((t) => t.id !== task.id));
+  }
   return (
     <div>
-      <button onClick={() => dispatch({ type: "increment" })}>増やす</button>
-      <button onClick={() => dispatch({ type: "decrement" })}>減らす</button>
-      <p>{count}</p>
+      <p>Prague itinerary</p>
+      
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
     </div>
   );
 }
