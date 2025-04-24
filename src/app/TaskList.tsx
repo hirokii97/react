@@ -11,8 +11,13 @@ type Props = {
 export default function TaskList({ tasks, onChangeTask, onDeleteTask }: Props) {
   return (
     <ul>
-      {tasks.map((task) => (
-        <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
+      {tasks.map((task, index) => (
+        <Task
+          key={index}
+          task={task}
+          onChange={onChangeTask}
+          onDelete={onDeleteTask}
+        />
       ))}
     </ul>
   );

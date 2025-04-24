@@ -46,6 +46,7 @@ export default function Task({ task, onChange, onDelete }: Props) {
           })
         }
       />
+      {task.id}
       {textContent}
       <button onClick={(e) => onDelete(task)}>削除</button>
     </div>
