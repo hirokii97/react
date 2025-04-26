@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import AddTask from "@/app/AddTask";
 import TaskList from "@/app/TaskList";
 import { useReducer } from "react";
+import Form from "@/app/Form";
 // https://ja.react.dev/learn/extracting-state-logic-into-a-reducer#comparing-usestate-and-usereducer
 export type TaskType = { id: string; text: string; done: boolean };
 type ActionType = {
@@ -73,6 +74,7 @@ export default function Home() {
         onChangeTask={handleChangeTask}
         onDeleteTask={handleDeleteTask}
       />
+      <Form />
     </div>
   );
 }
