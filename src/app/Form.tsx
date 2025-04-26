@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+// https://reffect.co.jp/react/react-hook-form#i
 export default function Form() {
   const {
     register,
