@@ -3,9 +3,15 @@
 import { v4 as uuid } from "uuid";
 import AddTask from "@/app/AddTask";
 import TaskList from "@/app/TaskList";
-import { useState } from "react";
+import { useReducer } from "react";
 
 export type TaskType = { id: string; text: string; done: boolean };
+type ActionType = {
+  type: "addTask" | "changeTask" | "deleteTask";
+  id: string;
+  text?: string;
+  task?: TaskType;
+};
 
 export default function Home() {
   const initialTasks: TaskType[] = [
@@ -13,23 +19,50 @@ export default function Home() {
     { id: "1", text: "Watch a puppet show", done: false },
     { id: "2", text: "Lennon Wall pic", done: false },
   ];
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, dispatch] = useReducer(reducer, initialTasks);
   function handleAddTask(newText: string) {
-    setTasks([...tasks, { id: uuid(), text: newText, done: false }]);
+    dispatch({
+      type: "addTask",
+      text: newText,
+      id: uuid(),
+    });
   }
   function handleChangeTask(task: TaskType) {
-    setTasks(
-      tasks.map((t) => {
-        if (t.id === task.id) {
-          return task;
-        } else {
-          return t;
-        }
-      })
-    );
+    dispatch({
+      type: "changeTask",
+      id: task.id,
+      task: task,
+    });
   }
   function handleDeleteTask(task: TaskType) {
-    setTasks(tasks.filter((t) => t.id !== task.id));
+    dispatch({
+      type: "deleteTask",
+      id: task.id,
+    });
+  }
+  function reducer(tasks: TaskType[], action: ActionType) {
+    switch (action.type) {
+      case "addTask": {
+        if (action.text) {
+          return [...tasks, { id: action.id, text: action.text, done: false }];
+        }
+      }
+      case "changeTask": {
+        return tasks.map((t) => {
+          if (t.id === action.id && action.task) {
+            return action.task;
+          } else {
+            return t;
+          }
+        });
+      }
+      case "deleteTask": {
+        return tasks.filter((t) => t.id !== action.id);
+      }
+      default: {
+        throw Error("Unknown action" + action.type);
+      }
+    }
   }
   return (
     <div>
