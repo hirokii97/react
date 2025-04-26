@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import AddTask from "@/app/AddTask";
 import TaskList from "@/app/TaskList";
 import { useReducer } from "react";
-
+// https://ja.react.dev/learn/extracting-state-logic-into-a-reducer#comparing-usestate-and-usereducer
 export type TaskType = { id: string; text: string; done: boolean };
 type ActionType = {
   type: "addTask" | "changeTask" | "deleteTask";
