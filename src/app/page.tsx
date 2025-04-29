@@ -4,14 +4,17 @@ import { v4 as uuid } from "uuid";
 import AddTask from "@/app/AddTask";
 import TaskList from "@/app/TaskList";
 import {
+  ChangeEvent,
   createContext,
   Dispatch,
   SetStateAction,
   useLayoutEffect,
   useReducer,
   useState,
+  useTransition,
 } from "react";
 import Form from "@/app/Form";
+import { set } from "react-hook-form";
 
 // https://ja.react.dev/learn/extracting-state-logic-into-a-reducer#comparing-usestate-and-usereducer
 export type TaskType = { id: string; text: string; done: boolean };
@@ -39,10 +42,20 @@ export const LoginFlagContext = createContext<LoginFlagContextType | null>(
 export default function Home() {
   const [loginFlag, setLoginFlag] = useState<string | null>(null);
   const [position, setPosition] = useState<positionType>({ x: 0, y: 0 });
+  const [isPending, startTransition] = useTransition();
+  const [searchWord, setSearchWord] = useState<string>("");
 
   useLayoutEffect(() => {
-    setPosition({ x: window.scrollX + 50, y: window.scrollY + 50 });
+    setPosition({ x: window.scrollX, y: window.scrollY });
   }, []);
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchWord(e?.target?.value);
+    startTransition(() => {
+      // Simulate a 5-second delay
+      console.log(`Search completed for: ${searchWord}`);
+    });
+  };
 
   const initialTasks: TaskType[] = [
     { id: "0", text: "Visit Kafka Museum", done: true },
@@ -120,8 +133,17 @@ export default function Home() {
             setLoginFlag,
           }}
         >
-          <Form />
+          {/* <Form /> */}
         </LoginFlagContext.Provider>
+      </div>
+
+      <div>
+        <input
+          type="text"
+          onChange={(e) => handleSearch(e)}
+          value={searchWord}
+        />
+        <p>{isPending && `${searchWord}を検索中・・・・`}</p>
       </div>
     </div>
   );
