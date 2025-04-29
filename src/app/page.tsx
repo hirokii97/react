@@ -86,21 +86,26 @@ export default function Home() {
 
   return (
     <div>
-      <p>{loginFlag === "notLogin" ? "未ログイン" : "ログイン中"}</p>
-      <AddTask onAddTask={handleAddTask} />
-      <TaskList
-        tasks={tasks}
-        onChangeTask={handleChangeTask}
-        onDeleteTask={handleDeleteTask}
-      />
-      <LoginFlagContext.Provider
-        value={{
-          loginFlag,
-          setLoginFlag,
-        }}
-      >
-        <Form />
-      </LoginFlagContext.Provider>
+      <div>
+        <p>タスク管理</p>
+        <AddTask onAddTask={handleAddTask} />
+        <TaskList
+          tasks={tasks}
+          onChangeTask={handleChangeTask}
+          onDeleteTask={handleDeleteTask}
+        />
+      </div>
+      <div style={{ marginTop: "50px" }}>
+        <p>{loginFlag === "notLogin" ? "未ログイン" : "ログイン中"}</p>
+        <LoginFlagContext.Provider
+          value={{
+            loginFlag,
+            setLoginFlag,
+          }}
+        >
+          <Form />
+        </LoginFlagContext.Provider>
+      </div>
     </div>
   );
 }

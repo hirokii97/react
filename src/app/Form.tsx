@@ -31,23 +31,15 @@ export default function Form() {
   return (
     <div style={{ marginTop: "20px" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {loginFlag === "notLogin" ? (
-          <div className="email">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              {...register("email", { required: true })}
-            />
-            {errors.email && <div>メールかいて</div>}
-          </div>
-        ) : (
-          <div className="email">
-            <label htmlFor="email">Email</label>
-            <input type="text" value={"example.com"} />
-          </div>
-        )}
-
+        <div className="email">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            {...register("email", { required: true })}
+          />
+          {errors.email && <div>メールかいて</div>}
+        </div>
         <div>
           <label htmlFor="password">パスワード</label>
           <input
