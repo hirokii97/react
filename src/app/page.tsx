@@ -3,8 +3,15 @@
 import { v4 as uuid } from "uuid";
 import AddTask from "@/app/AddTask";
 import TaskList from "@/app/TaskList";
-import { useReducer } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useReducer,
+  useState,
+} from "react";
 import Form from "@/app/Form";
+
 // https://ja.react.dev/learn/extracting-state-logic-into-a-reducer#comparing-usestate-and-usereducer
 export type TaskType = { id: string; text: string; done: boolean };
 type ActionType = {
@@ -14,7 +21,18 @@ type ActionType = {
   task?: TaskType;
 };
 
+type LoginFlagContextType = {
+  loginFlag: string | null;
+  setLoginFlag: Dispatch<SetStateAction<string | null>>;
+};
+
+export const LoginFlagContext = createContext<LoginFlagContextType | null>(
+  null
+);
+
 export default function Home() {
+  const [loginFlag, setLoginFlag] = useState<string | null>(null);
+
   const initialTasks: TaskType[] = [
     { id: "0", text: "Visit Kafka Museum", done: true },
     { id: "1", text: "Watch a puppet show", done: false },
@@ -65,16 +83,24 @@ export default function Home() {
       }
     }
   }
+
   return (
     <div>
-      <p>Prague itinerary</p>
+      <p>{loginFlag === "notLogin" ? "未ログイン" : "ログイン中"}</p>
       <AddTask onAddTask={handleAddTask} />
       <TaskList
         tasks={tasks}
         onChangeTask={handleChangeTask}
         onDeleteTask={handleDeleteTask}
       />
-      <Form />
+      <LoginFlagContext.Provider
+        value={{
+          loginFlag,
+          setLoginFlag,
+        }}
+      >
+        <Form />
+      </LoginFlagContext.Provider>
     </div>
   );
 }

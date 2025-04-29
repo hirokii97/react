@@ -1,4 +1,5 @@
-import React from "react";
+import { LoginFlagContext } from "@/app/page";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 
 // https://reffect.co.jp/react/react-hook-form#i
@@ -10,20 +11,43 @@ export default function Form() {
   } = useForm({
     criteriaMode: "all",
   });
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
+  const loginFlagContext = useContext(LoginFlagContext);
+
+  if (!loginFlagContext) {
+    throw new Error("LoginFlagContext is not provided");
+  }
+
+  const { loginFlag, setLoginFlag } = loginFlagContext;
+  const handleChangeLogin = () => {
+    loginFlag === "notLogin"
+      ? setLoginFlag("login") // ログインしている場合はログアウト
+      : setLoginFlag("notLogin"); // ログインしていない場合はログイン
+  };
 
   return (
     <div style={{ marginTop: "20px" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="email">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", { required: true })}
-          />
-          {errors.email && <div>メールかいて</div>}
-        </div>
+        {loginFlag === "notLogin" ? (
+          <div className="email">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              {...register("email", { required: true })}
+            />
+            {errors.email && <div>メールかいて</div>}
+          </div>
+        ) : (
+          <div className="email">
+            <label htmlFor="email">Email</label>
+            <input type="text" value={"example.com"} />
+          </div>
+        )}
+
         <div>
           <label htmlFor="password">パスワード</label>
           <input
@@ -56,6 +80,7 @@ export default function Form() {
         </div>
         <button type="submit">送信</button>
       </form>
+      <button onClick={handleChangeLogin}>アカウント切り替え</button>
     </div>
   );
 }
