@@ -7,6 +7,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useLayoutEffect,
   useReducer,
   useState,
 } from "react";
@@ -26,12 +27,22 @@ type LoginFlagContextType = {
   setLoginFlag: Dispatch<SetStateAction<string | null>>;
 };
 
+type positionType = {
+  x: number;
+  y: number;
+};
+
 export const LoginFlagContext = createContext<LoginFlagContextType | null>(
   null
 );
 
 export default function Home() {
   const [loginFlag, setLoginFlag] = useState<string | null>(null);
+  const [position, setPosition] = useState<positionType>({ x: 0, y: 0 });
+
+  useLayoutEffect(() => {
+    setPosition({ x: window.scrollX + 50, y: window.scrollY + 50 });
+  }, []);
 
   const initialTasks: TaskType[] = [
     { id: "0", text: "Visit Kafka Museum", done: true },
@@ -85,7 +96,13 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div
+      style={{
+        position: "absolute",
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+      }}
+    >
       <div>
         <p>タスク管理</p>
         <AddTask onAddTask={handleAddTask} />
