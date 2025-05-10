@@ -18,6 +18,7 @@ import { set } from "react-hook-form";
 import List from "@/app/List";
 import SecondList from "@/app/SecondList";
 import StateList from "@/app/StateList";
+import Profile from "@/app/Profile";
 
 // https://ja.react.dev/learn/extracting-state-logic-into-a-reducer#comparing-usestate-and-usereducer
 export type TaskType = { id: string; text: string; done: boolean };
@@ -152,6 +153,7 @@ export default function Home() {
       <List/>
       <SecondList/>
       <StateList/>
+      <Profile/>
     </div>
   );
 }
